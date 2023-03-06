@@ -1,4 +1,4 @@
 
-sirius: HOST=sirius \
-	vpn-client \
-	ftb-server
+.PHONY: sirius
+sirius: HOST := sirius
+sirius: vpn-client ftb-server
