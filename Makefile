@@ -1,28 +1,17 @@
-
 SSH := ssh
 SCP := scp
 
-VANILLA_SERVER := sol.lazr.space
-MODDED_SERVER := sirius
+MODDED_SERVER := sirius.lazr.space
+.DEFAULT: status
 
-VANILLA_INSTALL_DIR := /var/games/minecraft
-VANILLA_SCRIPTS := start.sh upgrade.sh
-VANILLA_SCRIPT_DESTS := $(patsubst %,$(VANILLA_INSTALL_DIR)/%,$(VANILLA_SCRIPTS))
+status:
 
-vanilla-status:
-	$(SSH) $(VANILLA_SERVER) "systemctl status minecraft@vanilla"
+install:
+	@echo "Installed everything!"
 
-vanilla-install: $(VANILLA_SCRIPTS)
-	@$(SCP) $^ $(VANILLA_SERVER):/tmp/
-	@$(SSH) $(VANILLA_SERVER) "\
-		cd /tmp; \
-		mv $^ $(VANILLA_INSTALL_DIR); \
-		chmod 755 $(VANILLA_SCRIPT_DESTS); \
-		echo '$$(pass sys/sol/lazr)' | sudo -S chown minecraft:minecraft $(VANILLA_SCRIPT_DESTS); \
-	"
-
-vanilla-start:
-	@$(SSH) $(VANILLA_SERVER) "echo '$$(pass sys/sol/lazr)' | sudo -S systemctl restart minecraft@vanilla"
-
-vanilla-upgrade: vanilla-install
-	$(SSH) $(VANILLA_SERVER) "cd $(VANILLA_INSTALL_DIR); ./upgrade.sh"
+-include minecraft.mk
+-include znc.mk
+-include website.mk
+-include ftb.mk
+-include wireguard.mk
+-include gitolite.mk
