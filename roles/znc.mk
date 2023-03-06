@@ -2,7 +2,7 @@
 # ZNC configuration
 #
 
-ZNC_SERVER = sol
+ZNC_SERVER := sol
 
 install-znc:
 
