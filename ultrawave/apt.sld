@@ -5,7 +5,8 @@
   (import (scheme base)
           (scheme list)
           (scheme show)
-          (ultrawave base))
+          (ultrawave base)
+          (ultrawave command))
   (begin
    
    (define updated
@@ -26,8 +27,5 @@
    (define (packages-installed . names)
      (shell-command-property
       `(apt-get install --quiet --yes ,@names)
-      (show #f "Packages installed: " names)))
-
-   ))
-
+      (show #f "Packages installed: " names)))))
 

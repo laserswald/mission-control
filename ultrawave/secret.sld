@@ -58,7 +58,7 @@
      
       ;; Remove a password.
       (lambda (name)
-        (do-process! `(pass rm --force ,name)))))
+        (do-process! `(pass rm --force ,name)))))))
 
-   ))
+   
 

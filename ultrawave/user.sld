@@ -1,13 +1,16 @@
 
 (define-library (ultrawave user)
-  (export user-exists
-          user-password-generated)
+  (export user-exists)
+          ;user-password-generated
+          
 
   (import (scheme base) 
           (scheme show)
           (gauche base)
           (gauche process)
-          (ultrawave base))
+          (ultrawave base)
+          (ultrawave property)
+          (ultrawave command))
 
   (begin
 
@@ -23,20 +26,20 @@
        '()))
    
    
-    (define (user-password-generated username secret-storage)
-      (let ((secret-path (string-append "sys/" (host-nick (current-remote-host)) "/" username)))
-        (property
-         (lambda ()
-           (secret-storage-ref secret-storage secret-path))
-         (lambda ()
-           (do-process! `(pass generate ,secret-path))
-           (do-process! `(passwd ,username)
-                        :host (current-host-login-string)
-                        :redirects ((<< ))
-         (lambda ()
-           (secret-storage-remove! secret-storage secret-path))
+    #;(define (user-password-generated username secret-storage)
+       (let ((secret-path (string-append "sys/" (host-nick (current-remote-host)) "/" username)))
+         (property
+          (lambda ()
+            (secret-storage-ref secret-storage secret-path))
+          (lambda ()
+            (do-process! `(pass generate ,secret-path))
+            (do-process! `(passwd ,username)
+                         :host (current-host-login-string)
+                         :redirects ((<<))
+             (lambda ()
+               (secret-storage-remove! secret-storage secret-path))
          
-         '()
-         )))
+             '())))))))
+         
 
-   ))
+   

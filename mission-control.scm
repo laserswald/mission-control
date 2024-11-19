@@ -1,57 +1,71 @@
 
 (import (scheme base)
         (scheme show)
+        (scheme hash-table)
+        (scheme comparator)
+
         (gauche base)
         (gauche process)
+
         (ultrawave base)
         (ultrawave user)
+        (ultrawave wireguard)
         (ultrawave filesystem)
         (prefix (ultrawave apt) apt:)
         (prefix (ultrawave pip) pip:)
         (prefix (ultrawave pacman) pacman:)
         (ultrawave systemd)
-        (ultrawave secret))
+        (ultrawave secret)
+        (ultrawave container)
+        (ultrawave property))
 
-(define-syntax define-host
-  (syntax-rules ()
-    ((define-host %identifier (%user %address) %configure-identifier (%properties ...))
-     (begin 
-      (define %identifier
-        (host %user %address (symbol->string '%identifier)))
-      (define %configure-identifier
-        (lambda ()
-          (configure! (list %properties ...) %identifier)))))))
-;;
-;; Inventory of all my systems.
-;;
+;;; Generate wireguard peers.
 
-(define vespa
-  (host "root" "192.168.1.5" "vespa"))
+(define (names->peers prefix names)
+  (let ((ip-last 1))
+    (map (lambda (name)
+           (let ((peer (wireguard-peer name (string-append prefix (number->string ip-last))))) 
+             (set! ip-last (+ 1 ip-last))
+             peer))
+         names)))
 
-(define-host andromeda ("root" "andromeda.lazr.lan") configure-andromeda!
-  (core-setup/debian
-   zeroconf-setup/debian
-   (apt:packages-installed "mpc")))
+(define wireguard-service-names
+  (list "sol"
+        "sirius"
+        "andromeda"
+        "baked"
+        "vespa"))
+        
+(define wireguard-user-names
+  (list "ben-phone"
+        "ben-laptop"
+        "julia-phone"
+        "julia-laptop"
+        "gina"
+        "robin"
+        "miriam"
+        "chloe"
+        "nathan"
+        "megan"
+        "victoria"
+        "colton"))
 
-(define baked 
-  (host "root" "baked.lazr.lan" "baked"))
+(define storage-users
+  (list "ben" "jules" "miriam" "megan" "gina" "robin"))
 
-(define sol
-  (host "root" "sol.lazr.space" "sol"))
+(define wireguard-peers
+  (append (names->peers "10.1.0." wireguard-service-names)
+          (names->peers "10.1.1." wireguard-user-names)))
 
-(define sirius
-  (host "root" "sirius.vm.tornadovps.net" "sirius"))
+(define lazr-internal-vpn
+  (wireguard-network (car wireguard-peers) ;; Should be Sol
+                     (cdr wireguard-peers)))
 
-(define inventory
-  (list vespa andromeda baked sol))
-
-(define (host-alive? host)
-  (do-process `(ping -c 1 ,(host-name host))))
-
+         
 (define (users-set-up secret-storage)
   (property-group "Users set up."
     (user-exists "lazr")
-    (user-password-generated "lazr" secret-storage)))
+    #;(user-password-generated "lazr" secret-storage)))
 
 (define (package-service-enabled/pacman package)
   (property-group 
@@ -77,80 +91,13 @@
     apt:updated
     apt:upgraded
     apt:cleaned
-    (apt:packages-installed "tmux" "zsh" "python3-pip")
-    ;(wireguard-setup)
-    ))
-
-(define zeroconf-setup/debian
-  (property-group "Set up zeroconf support."
-    (package-service-enabled/apt "avahi-daemon")
-    (package-service-enabled/apt "wsdd")))
-
-(define mpd-setup
-  (property-group "MPD service set up."
-   (apt:packages-installed
-    "mopidy"
-    "mopidy-mpd"
-    "mpc"
-    "ncmpcpp"
-    "gstreamer1.0-tools")
-
-   (pip:packages-installed
-    "Mopidy-Spotify"
-    "Mopidy-Iris")
-
-   (services-enabled "mopidy")))
-
-(define fail2ban-enabled (package-service-enabled/pacman "fail2ban"))
-(define lighttpd-enabled (package-service-enabled/pacman "lighttpd"))
-(define prosody-enabled (package-service-enabled/pacman "prosody"))
-(define radicale-enabled (package-service-enabled/pacman "radicale"))
-(define znc-enabled (package-service-enabled/pacman "znc"))
-
-(define internet-facing-properties
-  (list fail2ban-enabled))
-
-(define (configure-baked!)
-  (configure! (list core-setup/debian) baked))
-
-(define (configure-vespa!)
-  (configure! 
-   (list
-    core-setup/debian
-    (mpd-setup))
-   vespa))
-
-(define (configure-sol!)
-  (configure! 
-   (append (list
-            ; (core-setup)
-            pacman:updated
-            (pacman:packages-installed "openssh")
-            
-            ; certbot-enabled
-            ; (minecraft-enabled "vanilla")
-
-            lighttpd-enabled
-            prosody-enabled
-            radicale-enabled
-            znc-enabled
-            )
-           internet-facing-properties)
-   sol))
-
-(define (configure-sirius!)
-  (configure! (list
-               pacman:updated
-               (pacman:packages-installed "openssh"))
-              sirius))
+    (apt:packages-installed "tmux" "zsh" "python3-pip")))
+   
+(include "services.scm")
+(include "inventory.scm")
 
 (define (configure-wireguard-registration!)
   (values))
-
-(define (configure-each configuration hosts)
-  (for-each (lambda (host)
-              (configure! configuration host))
-            hosts))
 
 (define (install-key! host)
   (do-process! `(ssh-copy-id ,(string-append "lazr@" (host-name host)))))
@@ -159,8 +106,6 @@
   (for-each install-key! hosts))
 
 (define (configure-all!)
-  (configure-baked!)
-  (configure-andromeda!)
-  (configure-vespa!)
-  (configure-sol!)
+  (wireguard-network-generate-configs lazr-internal-vpn)
+  (inventory-configure!/threaded)
   (configure-wireguard-registration!))
