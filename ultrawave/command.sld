@@ -6,9 +6,14 @@
    process-transform
    do-remote-process
    do-remote-process!
-   shell-command-property)
+   shell-command-property
+   
+   command-exception
+   command-exception?
+   command-exception-displayed)
 
   (import (scheme base)
+          (scheme show)
           (gauche base)
           (gauche process)
           (ultrawave base)
@@ -48,11 +53,16 @@
       (stderr command-exception-stderr))
 
     (define (command-exception-displayed ce)
-      (displayed
-        (as-red "[" (command-exception-host ce) "]")
-        (joined " " (command-exception-command ce))
-        " failed with error code "
-        (command-exception-retcode ce)))
+      (each
+        (joined displayed
+                (list
+                  (as-red "[" (host-nick (command-exception-host ce)) "]")
+                  (command-exception-command ce)
+                  "failed with error code"
+                  (command-exception-retcode ce))
+                " ")
+        nl
+        (as-yellow (command-exception-stderr ce))))
 
     (define (process->string/remote command)
       (process->string (protocol-command (host-protocol (current-remote-host)))))

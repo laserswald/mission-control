@@ -48,10 +48,15 @@
         "nathan"
         "megan"
         "victoria"
-        "colton"))
+        "colton"
+        "apk"))
+        
 
 (define storage-users
   (list "ben" "jules" "miriam" "megan" "gina" "robin"))
+
+(define guest-users
+  (list "neeasade" "apk" "chloeh"))
 
 (define wireguard-peers
   (append (names->peers "10.1.0." wireguard-service-names)
@@ -61,51 +66,13 @@
   (wireguard-network (car wireguard-peers) ;; Should be Sol
                      (cdr wireguard-peers)))
 
-         
-(define (users-set-up secret-storage)
-  (property-group "Users set up."
-    (user-exists "lazr")
-    #;(user-password-generated "lazr" secret-storage)))
 
-(define (package-service-enabled/pacman package)
-  (property-group 
-   (show #f package " installed and enabled.")
-   (pacman:packages-installed package)
-   (services-enabled package)))
-
-(define (package-service-enabled/apt package)
-  (property-group 
-   (show #f package " installed and enabled.")
-   (apt:packages-installed package)
-   (services-enabled package)))
-
-(define core-setup/arch
-  (property-group "Core set up for Arch system."
-    (users-set-up pass-secret-storage)
-    pacman:updated
-    (pacman:packages-installed "tmux" "zsh")))
-
-(define core-setup/debian
-  (property-group "Core set up for Debian system."
-    (users-set-up pass-secret-storage)
-    apt:updated
-    apt:upgraded
-    apt:cleaned
-    (apt:packages-installed "tmux" "zsh" "python3-pip")))
-   
+(include "units/core.scm")
+(include "units/users.scm")
 (include "services.scm")
 (include "inventory.scm")
 
-(define (configure-wireguard-registration!)
-  (values))
-
-(define (install-key! host)
-  (do-process! `(ssh-copy-id ,(string-append "lazr@" (host-name host)))))
-
-(define (install-keys! hosts)
-  (for-each install-key! hosts))
 
 (define (configure-all!)
   (wireguard-network-generate-configs lazr-internal-vpn)
-  (inventory-configure!/threaded)
-  (configure-wireguard-registration!))
+  (inventory-configure!/threaded))

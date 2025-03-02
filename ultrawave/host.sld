@@ -143,27 +143,27 @@
    ;;; Look up an extra configuration parameter.
    (define (host-extras-ref host key)
      (mapping-ref/default (host-extras host) key #f))
+   
+   
+   (define (host-extras-set! host key value))
+     (host-set-extras! host (mapping-set (host-extras host) key value)))
   
 
    ;;; (host-extras-adjoin! host? any? any?) -> undefined
    ;;;
    ;;; Add an extra information parameter.
-   (define (host-extras-adjoin! host key value)
-     (host-set-extras! host (mapping-set (host-extras host) key value)))
+   (define (host-extras-adjoin! host key . items)
+     (host-set-extras! host 
+                       (mapping-update 
+                        (host-extras host)
+                        key
+                        ;; updater 
+                        (lambda (old-value)
+                          (set-adjoin old-value items))
+                        ;; on failure
+                        (lambda ()
+                          (set (make-default-comparator)))))
 
-   (define (host-add-pre-hook! host proc)
-     (host-set-pre-config-hook! host
-                                (hook-adjoin (host-pre-config-hook host) proc)))
-
-   (define (host-add-post-hook! host proc)
-     (host-set-post-config-hook! host
-                                 (hook-adjoin (host-pre-config-hook host) proc)))
-   
-   (define (host-run-pre-config host)
-     (hook-run! (host-pre-config-hook host)))
-
-   (define (host-run-post-config host)
-     (hook-run! (host-post-config-hook host)))
 
    ;;; A host for the local machine.
    (define localhost 

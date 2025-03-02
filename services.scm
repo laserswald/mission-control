@@ -1,7 +1,7 @@
+(include "units/users.scm")
 (include "units/lighttpd.scm")
 (include "units/containers.scm")
 (include "units/dns.scm")
-
 
 (define zeroconf-setup/debian
   (property-group "Set up zeroconf support."
@@ -26,8 +26,11 @@
    (services-enabled "mopidy")))
 
 
-(define fail2ban-enabled
+(define fail2ban-enabled/arch
   (package-service-enabled/pacman "fail2ban"))
+
+(define fail2ban-enabled/debian
+  (package-service-enabled/apt "fail2ban"))
 
 
 (define prosody-enabled
@@ -42,9 +45,14 @@
   (package-service-enabled/pacman "znc"))
 
 
-(define internet-facing-properties
+(define internet-facing-properties/arch
   (property-group "General internet protective properties"
-                  fail2ban-enabled))
+                  fail2ban-enabled/arch))
+
+
+(define internet-facing-properties/debian
+  (property-group "General internet protective properties"
+                  fail2ban-enabled/debian))
 
 
 (define accountabilly-enabled
@@ -54,8 +62,12 @@
    (services-enabled "accountabilly")))
 
 
+
 (define gitolite-enabled
-  (property values))
+  (property-group "Gitolite enabled."
+   (apt:packages-installed "gitolite3")
+   (system-user-exists "git")))
+
 
 
 (define grocy-enabled
@@ -71,3 +83,4 @@
     (lighttpd-tested-config "/etc/lighttpd/conf-available/20-grocy.conf")
                   
     (services-restarted "lighttpd")))
+

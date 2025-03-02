@@ -40,7 +40,10 @@
 
      ;; A pre-loaded host for which to execute a property upon.
      ;; Either a host? or #f.
-     (host property-host property-set-host!))
+     (host property-host property-set-host!)
+     
+     ;; A procedure that will be executed before any properties are applied to the host.
+     (load-fn property-load-fn))
 
    ;;; (property) -> property?
    ;;;
@@ -67,6 +70,11 @@
    ;;; Return the property set up to always perform on the given host.
    (define (performed-on-host host property)
      (property-set-host! property host)
+     property)
+   
+   
+   (define (with-pre-load-fn fn property)
+     (property-set-load-fn! property fn)
      property)
 
 
@@ -115,6 +123,8 @@
    (define (ensure-property! property)
      (for-each ensure-property! (property-dependencies property))
      (when (property-should-apply? property)
+       (when (property-load-fn property)
+         ((property-load-fn property)))
        (property-apply! property)))
   
 

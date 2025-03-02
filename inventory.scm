@@ -10,6 +10,7 @@
    `(sysctl net.ipv4.ip_forward=1)
    "Enabled IP forwarding."))
 
+(inventory-clear!)
 
 (define-host sol
   ("root" "sol.lazr.space")
@@ -27,21 +28,25 @@
    prosody-enabled
    radicale-enabled
    znc-enabled
-   internet-facing-properties))
+   internet-facing-properties/arch))
+ 
 
-(define-host sirius
-  ("root" "sirius.vm.tornadovps.net")
-  configure-sirius!
-  (pacman:updated
-   (pacman:packages-installed "openssh")
-   (pacman:packages-installed "crun" "podman")
-   (wireguard-setup/arch "sirius")))
+#;(define-host sirius
+    ("root" "sirius.vm.tornadovps.net")
+    configure-sirius!
+    (pacman:updated
+     (pacman:packages-installed "openssh")
+     (pacman:packages-installed "crun" "podman")
+     (wireguard-setup/arch "sirius")
+     internet-facing-properties/arch))
 
 (define-host andromeda 
   ("root" "andromeda.lazr.internal") 
   configure-andromeda!
   (core-setup/debian
    ; zeroconf-setup/debian
+   
+   (guest-users-set-up guest-users)
 
    lighttpd-enabled/debian
    (wireguard-setup/debian "andromeda")
