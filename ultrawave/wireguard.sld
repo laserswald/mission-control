@@ -13,6 +13,7 @@
           wireguard-peer-displayed
 
           show-wireguard-peer
+          wireguard-peer-ip-address
           wireguard-peer-client-config
           wireguard-peer-hub-config
 
