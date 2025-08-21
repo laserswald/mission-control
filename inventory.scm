@@ -3,14 +3,13 @@
         (ultrawave pacman)
         (ultrawave inventory)
         (ultrawave command)
-        (ultrawave wireguard))
-
-(define ip-forwarding-enabled
-  (shell-command-property
-   `(sysctl net.ipv4.ip_forward=1)
-   "Enabled IP forwarding."))
+        (ultrawave wireguard)
+	(ultrawave network))
 
 (inventory-clear!)
+
+(define dnsmasq-service (dnsmasq-dns-service "dnsmasq"))
+(define pihole-ftl-service (dnsmasq-dns-service "pihole-FTL"))
 
 (define-host sol
   ("root" "sol.lazr.space")
@@ -21,8 +20,16 @@
    
    ; certbot-enabled
    ; (minecraft-enabled "vanilla")
-   (wireguard-setup/arch "hub")
    ip-forwarding-enabled
+
+   ;accountabilly-enabled
+
+   ;; Vanilla minecraft
+   (port-tunneled "10.1.0.1" 25565 "10.1.0.3")
+
+   ;; Greeblecraft
+   (port-tunneled "10.1.0.1" 25566 "10.1.0.3")
+   (port-tunneled "10.1.0.1" 24454 "10.1.0.3") ; Simple Voice Chat
 
    lighttpd-enabled/arch
    prosody-enabled
@@ -30,31 +37,22 @@
    znc-enabled
    internet-facing-properties/arch))
  
-
-#;(define-host sirius
-    ("root" "sirius.vm.tornadovps.net")
-    configure-sirius!
-    (pacman:updated
-     (pacman:packages-installed "openssh")
-     (pacman:packages-installed "crun" "podman")
-     (wireguard-setup/arch "sirius")
-     internet-facing-properties/arch))
-
 (define-host andromeda 
-  ("root" "andromeda.lazr.internal") 
+  ; ("root" "andromeda.home.arpa") 
+  ("root" "192.168.1.3") 
   configure-andromeda!
   (core-setup/debian
    ; zeroconf-setup/debian
    
    (guest-users-set-up guest-users)
 
-   lighttpd-enabled/debian
-   (wireguard-setup/debian "andromeda")
+   bird-cam-receiver-enabled
    
-   grocy-enabled
+   ; grocy-enabled
 
-   (services-enabled "dw20-server"
-                     "factorio-server")
+   (minecraft-instance-enabled "vanilla")
+
+   (services-enabled "factorio-server")
 
    ; (accountabilly-enabled)
    (apt:packages-installed "mpc")))
@@ -70,14 +68,11 @@
    mpd-setup))
 
 (define-host baked
-  ("root" "192.168.1.2")
+  ("root" "baked.home.arpa")
   configure-baked!
   (core-setup/debian 
-
    (wireguard-setup/debian "baked")
+   (dns-cname-registered pihole-ftl-service
+                         "grocy.lazr.internal"
+                         "andromeda.lazr.internal"))) 
 
-   (dns-cname-registered "grocy.lazr.internal"
-                         "andromeda.lazr.internal")
-
-   #;zeroconf-setup/debian))
-   

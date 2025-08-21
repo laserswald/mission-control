@@ -1,0 +1,10 @@
+(define-library (ultrawave git)
+  (export repository-cloned)
+  (import (scheme base)
+          (ultrawave base)
+          (ultrawave command)
+          (ultrawave filesystem))
+  (begin
+   (define (repository-cloned remote-url destination)
+     (shell-command-property (string-append "Cloned git repository " remote-url " to " destination)
+                             `(git clone ,remote-url ,destination))))
