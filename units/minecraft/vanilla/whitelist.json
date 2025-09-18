@@ -1,67 +1,66 @@
 [
-  {
-    "name": "IndecisiveH2O",
-    "uuid": "b15d8fa5-cd87-4eb3-9e39-d0fbd305a0e8"
-  },
-  {
-    "name": "Lil_MamaBear",
-    "uuid": "8427a2fe-9000-43ba-8640-40d73d59c682"
-  },
-  {
-    "name": "Mohanoman",
-    "uuid": "7953be8a-6096-4662-af3b-3715030c1654"
-  },
-  {
-    "name": "Neeasade",
-    "uuid": "5fe30cfa-60be-4391-ab74-e84c7b8309e4"
-  },
-  {
-    "name": "PrinceCelice",
-    "uuid": "f19cb536-3fd5-4657-b726-c0522a84099b"
-  },
-  {
-    "name": "Satonka",
-    "uuid": "46f25f91-9c39-4e52-9397-3949064f7c86"
-  },
-  {
-    "name": "Shaunteclair",
-    "uuid": "075ec7be-160f-4990-b05a-cccfaf78f12d"
-  },
-  {
-    "name": "apk14",
-    "uuid": "54150c91-6296-45a4-ab8f-ee475569e5ec"
-  },
-  {
-    "name": "crazynate",
-    "uuid": "af677ca3-88c5-4373-a319-245bbde7ff73"
-  },
-  {
-    "name": "hazelisdumb",
-    "uuid": "f43bd8ef-c8d2-4457-bf94-d07ad1dcb89d"
-  },
-  {
-    "name": "kalibcrone",
-    "uuid": "1e918317-6b0e-4d23-9b6b-622440f420c0"
-  },
-  {
-    "name": "pikaeevee8",
-    "uuid": "c5ee5ec2-8354-4fcc-a511-d454c02ce1e7"
-  },
-  {
-    "name": "vipr_",
-    "uuid": "daf12691-f61a-4979-9d4a-9931d688ee83"
-  }
-{
-  "id" : "ae371ae700764c93a80dc4c37e509ca7",
-  "name" : "Sylphik"
-}
-{
-  "id" : "b058046655fc4ac2b7132a64ce571a92",
-  "name" : "kaleidokirin"
-}
-{
-  "id" : "18126421bf6f4b1fae429ab00b9bd8a6",
-  "name" : "SepharaDaFox"
-}
-
+    {
+	"name": "IndecisiveH2O",
+	"uuid": "b15d8fa5-cd87-4eb3-9e39-d0fbd305a0e8"
+    },
+    {
+	"name": "Lil_MamaBear",
+	"uuid": "8427a2fe-9000-43ba-8640-40d73d59c682"
+    },
+    {
+	"name": "Mohanoman",
+	"uuid": "7953be8a-6096-4662-af3b-3715030c1654"
+    },
+    {
+	"name": "Neeasade",
+	"uuid": "5fe30cfa-60be-4391-ab74-e84c7b8309e4"
+    },
+    {
+	"name": "PrinceCelice",
+	"uuid": "f19cb536-3fd5-4657-b726-c0522a84099b"
+    },
+    {
+	"name": "Satonka",
+	"uuid": "46f25f91-9c39-4e52-9397-3949064f7c86"
+    },
+    {
+	"name": "Shaunteclair",
+	"uuid": "075ec7be-160f-4990-b05a-cccfaf78f12d"
+    },
+    {
+	"name": "apk14",
+	"uuid": "54150c91-6296-45a4-ab8f-ee475569e5ec"
+    },
+    {
+	"name": "crazynate",
+	"uuid": "af677ca3-88c5-4373-a319-245bbde7ff73"
+    },
+    {
+	"name": "hazelisdumb",
+	"uuid": "f43bd8ef-c8d2-4457-bf94-d07ad1dcb89d"
+    },
+    {
+	"name": "kalibcrone",
+	"uuid": "1e918317-6b0e-4d23-9b6b-622440f420c0"
+    },
+    {
+	"name": "pikaeevee8",
+	"uuid": "c5ee5ec2-8354-4fcc-a511-d454c02ce1e7"
+    },
+    {
+	"name": "vipr_",
+	"uuid": "daf12691-f61a-4979-9d4a-9931d688ee83"
+    },
+    {
+	"id" : "ae371ae700764c93a80dc4c37e509ca7",
+	"name" : "Sylphik"
+    },
+    {
+	"id" : "b058046655fc4ac2b7132a64ce571a92",
+	"name" : "kaleidokirin"
+    },
+    {
+	"id" : "18126421bf6f4b1fae429ab00b9bd8a6",
+	"name" : "SepharaDaFox"
+    }
 ]

@@ -22,7 +22,7 @@
    ;;; Properties consist of a few procedures, and a list of dependencies that this property
    ;;; requires.
    (define-record-type <property>
-     (make-property applied? apply-fn unapply-fn dependencies host)
+     (make-property applied? apply-fn unapply-fn load-fn dependencies host)
      property?
 
      ;; A predicate or #f, if not given then this property shall always 
@@ -62,9 +62,14 @@
        ((applied? apply-fn unapply-fn)
         (property applied? apply-fn unapply-fn '()))
 
-       ;; Default for 'host': #f
+       ;; Defaults for everything else
        ((applied? apply-fn unapply-fn dependencies)
-        (make-property applied? apply-fn unapply-fn dependencies #f))))
+        (make-property applied?
+                       apply-fn
+                       unapply-fn
+                       #f ; load-fn
+                       dependencies
+                       #f)))) ; host
 
 
    ;;; Return the property set up to always perform on the given host.

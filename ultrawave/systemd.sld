@@ -39,7 +39,7 @@
       (lambda names
         (shell-command-property
          `(systemctl ,command --now ,@names)
-         (show #f "Services " (symbol->string command) "d: " names)))
+         (show #f "Services " (symbol->string command) "d: " names))))
       
     (define services-enabled (make-systemctl-command-property 'enable))
     (define services-disabled (make-systemctl-command-property 'disable))

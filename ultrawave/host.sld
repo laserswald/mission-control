@@ -145,7 +145,7 @@
      (mapping-ref/default (host-extras host) key #f))
    
    
-   (define (host-extras-set! host key value))
+   (define (host-extras-set! host key value)
      (host-set-extras! host (mapping-set (host-extras host) key value)))
   
 
@@ -162,7 +162,7 @@
                           (set-adjoin old-value items))
                         ;; on failure
                         (lambda ()
-                          (set (make-default-comparator)))))
+                          (set (make-default-comparator))))))
 
 
    ;;; A host for the local machine.
