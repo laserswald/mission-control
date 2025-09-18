@@ -1,3 +1,6 @@
+;;;; web-server.scm - Configure nginx on the remote node
+;;;;
+;;;;
 
 (import (ultrawave filesystem))
 
@@ -5,6 +8,7 @@
   (property-group
    "Web server is enabled."
    (apt:packages-installed "nginx")
+   (file-copied-to "units/nginx.conf" (string-append "/etc/nginx/nginx.conf"))
    (services-enabled "nginx")))
 
 (define (web-server-configured cfg-file name)
