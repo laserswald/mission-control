@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-DEBUG_MODE=1
+DEBUG_MODE=0
 
 SERVERS=(
     "lazr.space 443"
