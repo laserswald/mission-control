@@ -127,7 +127,6 @@
       (log/remote-host "applying firewall rule: " rule)
       (do-remote-process! `(iptables --append ,@rule))))
 
-
   (property
    (lambda ()
      ;; Allow the initial packet
@@ -163,3 +162,74 @@
 
      (log/remote-host "Installed port tunnel from " exposed-addr ":" exposed-port " -> " internal-dest))))
 
+
+;; Create a property group that will set up sendmail to forward to the bot@lazr.space
+;; email account.
+(define (msmtp-email-sender secrets)
+  (property-group
+   (show #f "msmtp email forwarding enabled")
+   (apt:packages-installed "msmtp" "msmtp-mta") 
+   (file-has-contents "/etc/msmtprc"
+                      (list
+                       "defaults"
+                       "tls on"
+                       "auth on"
+                       "account bot"
+                       "host mail.gandi.net"
+                       "port 587"
+                       "user bot@lazr.space"
+                       "from bot@lazr.space"
+                       "passwordeval cat /etc/secrets/msmtp-password"
+                       "account default : bot"))
+
+   ;; Install the secret file
+   (directory-exists "/etc/secrets")
+   (file-has-contents "/etc/secrets/msmtp-password"
+                      (list (secret-ref secrets "sys/bot-email-password")))
+
+   ;; Protect it by making it user and group readable only.
+   ;; Debian installs an 'msmtp' user for us.
+   (file-owned-by "/etc/secrets/msmtp-password" "root" "msmtp")
+   (file-permissions-set "/etc/secrets/msmtp-password" "640")))
+   
+
+(define mail-sender-enabled
+  (property-group
+   (show #f "Email sending system enabled.")
+   (apt:packages-installed "postfix" "mailutils" "opendkim" "opendkim-tools")
+   (services-disabled "postfix")
+   (file-has-contents
+    "/etc/postfix/main.cf"
+    (list
+     "myhostname = french-fry.lazr.space"
+     "myorigin = $mydomain"
+     "relayhost = $mydomain"
+     "inet_interfaces = loopback-only"
+     "mydestination = "))
+   (services-enabled "postfix")))
+
+(define (system-monitor-enabled secrets)
+  (property-group
+   (show #f "System monitor installed and enabled")
+
+   (msmtp-email-sender secrets)
+
+   (file-copied-to
+    "units/system-monitor/system-monitor.timer"
+    "/etc/systemd/system/system-monitor.timer")
+
+   (file-copied-to
+    "units/system-monitor/system-monitor.service"
+    "/etc/systemd/system/system-monitor.service")
+
+   (file-copied-to
+    "units/system-monitor/system-monitor.sh"
+    "/usr/local/bin/system-monitor.sh")
+
+   (file-permissions-set
+    "/usr/local/bin/system-monitor.sh"
+    "+x")
+
+   daemon-reloaded
+
+   (services-enabled "system-monitor.timer")))

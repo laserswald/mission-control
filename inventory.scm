@@ -17,7 +17,9 @@
   (; (core-setup)
    pacman:updated
    (pacman:packages-installed "openssh")
-   
+
+   (wireguard-setup/arch "hub")
+
    ; certbot-enabled
    ; (minecraft-enabled "vanilla")
    ip-forwarding-enabled
@@ -45,6 +47,8 @@
    ; zeroconf-setup/debian
    
    (guest-users-set-up guest-users)
+
+   (wireguard-setup/debian "andromeda")
 
    bird-cam-receiver-enabled
    
@@ -76,3 +80,11 @@
                          "grocy.lazr.internal"
                          "andromeda.lazr.internal"))) 
 
+(define french-fry
+  (host "admin" "french-fry" "french-fry" 'ssh-sudo))
+
+(define (configure-french-fry!)
+  (configure! (list core-setup/debian
+                    ; (wireguard-setup/debian "french-fry")
+                    (system-monitor-enabled pass-secret-storage))
+              french-fry))

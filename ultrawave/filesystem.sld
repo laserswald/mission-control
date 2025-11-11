@@ -10,6 +10,7 @@
           file-linked/hard
           file-linked/symbolic
           file-has-line
+          file-has-contents
 
 	  remote-file-exists?
 	  remote-directory-exists?
@@ -24,6 +25,9 @@
 
   (import (scheme base) 
           (scheme show)
+          (scheme write)
+          (scheme file)
+          (srfi 13)
           (ultrawave base)
           (ultrawave property)
           (ultrawave command)
@@ -51,7 +55,7 @@
       (let ((tempname #f))
 	(dynamic-wind
 	  (lambda ()
-	    (set! tempname (process->string '(mktemp))))
+	    (set! tempname (string-trim-both (process->string '(mktemp)))))
 	  (lambda ()
 	    (proc tempname))
 	  (lambda ()
@@ -59,8 +63,12 @@
 
     ;;; Copies a local file using `scp` to the given destination at the remote host.
     (define (copy-local-file! local-file destination)
-      (do-process! `(scp ,local-file
-			 ,(string-append (current-host-login-string) ":" destination))))
+      (let ((remote-temp-file
+             (string-trim-both (process->string `(ssh ,(current-host-login-string) mktemp)))))
+        (log/remote-host `(scp ,local-file ,(string-append (current-host-login-string) ":" remote-temp-file)))
+        (do-process! `(scp ,local-file ,(string-append (current-host-login-string) ":" remote-temp-file)))
+        (log/remote-host `(ssh ,(current-host-login-string) -- sudo mv ,remote-temp-file ,destination))
+        (do-process! `(ssh ,(current-host-login-string) -- sudo mv ,remote-temp-file ,destination))))
  
     ;;; Copy a remote file to the current host, at the given destination.
     (define (copy-remote-file! remote-file destination)
@@ -72,10 +80,11 @@
       (call-with-local-temporary-filename
        (lambda (tempname)
 	 (with-output-to-file tempname
-	   (for-each (lambda (ln)
-		       (write ln)
-		       (newline))
-		     contents))
+           (lambda ()
+	     (for-each (lambda (ln)
+		         (display ln (current-output-port))
+		         (newline (current-output-port)))
+		       contents)))
 	 (copy-local-file! tempname file))))
 
     ;;;;

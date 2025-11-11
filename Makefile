@@ -1,11 +1,11 @@
 
 GOSHFLAGS=-r7 -A. -Alib
 
-repl:
-	gosh $(GOSHFLAGS)
+deploy:
+	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-all!)'
 
-interact:
+repl:
 	gosh $(GOSHFLAGS) -l mission-control.scm
 
-configure-all:
-	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-all!)'
+french-fry:
+	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-french-fry!) (exit)'

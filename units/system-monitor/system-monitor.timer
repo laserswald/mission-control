@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer for periodic checking of system status
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+Unit=system-monitor.service
+
+[Install]
+WantedBy=default.target

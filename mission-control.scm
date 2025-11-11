@@ -35,7 +35,8 @@
         "sirius"
         "andromeda"
         "baked"
-        "vespa"))
+        "vespa"
+        "french-fry"))
 
 (define wireguard-service-peers
   (names->peers "10.1.0." wireguard-service-names))
@@ -98,4 +99,3 @@
 (define (configure-all!)
   (wireguard-network-generate-configs lazr-internal-vpn)
   (inventory-configure!/threaded))
-

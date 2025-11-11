@@ -3,7 +3,8 @@
 (define-library (ultrawave systemd)
   (export services-enabled
           services-disabled
-          services-restarted)
+          services-restarted
+          daemon-reloaded)
 
   (import (scheme base) 
           (scheme show)
@@ -45,5 +46,8 @@
     (define services-disabled (make-systemctl-command-property 'disable))
     (define services-restarted (make-systemctl-command-property 'restart))
 
-   ))
+    (define daemon-reloaded
+      (shell-command-property
+       `(systemctl daemon-reload)
+       "Systemd daemon reloaded"))))
 

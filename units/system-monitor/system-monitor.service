@@ -1,0 +1,8 @@
+[Unit]
+Description=System monitoring script
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/system-monitor.sh

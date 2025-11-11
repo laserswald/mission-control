@@ -28,7 +28,12 @@
                 command))
        ((sudo)
         (append `(sudo)
-                command))))   
+                command))
+       ((ssh-sudo)
+        (append `(ssh ,(current-host-login-string) sudo) 
+                command))
+       (else
+        (error "protocol-command: no such protocol" protocol))))
   
     (define (process->string command+args)
       (let* ([p (run-process command+args
