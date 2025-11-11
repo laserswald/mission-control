@@ -5,4 +5,4 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/system-monitor.sh
+ExecStart=/bin/bash /usr/local/bin/system-monitor.sh
