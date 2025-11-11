@@ -17,8 +17,10 @@
 
    (file-copied-to "units/minecraft/start.sh"
                    (string-append minecraft-servers-dir "/start.sh"))
+   (file-permissions-set (string-append minecraft-servers-dir "/start.sh") "+x")
    (file-copied-to "units/minecraft/upgrade.sh"
                    (string-append minecraft-servers-dir "/upgrade.sh"))
+   (file-permissions-set (string-append minecraft-servers-dir "/upgrade.sh") "+x")
 
    (file-copied-to "units/minecraft/global-banned-ips.json"
                    (string-append minecraft-servers-dir "/global-banned-ips.json"))
