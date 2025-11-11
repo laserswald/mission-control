@@ -7,7 +7,7 @@ set -euo pipefail
 SERVERS=(
     "lazr.space 443"
     "mc.lazr.space 25565"
-    "mc.lazr.space 25567"
+    "mc.lazr.space 25566"
 )
 
 declare -a FAILING_SERVERS
@@ -16,7 +16,7 @@ export FAILING_SERVERS
 for host in "${SERVERS[@]}"; do
 	if ! nc -w 10 -z $host; then
 	    echo "Could not connect to $host"
-	    FAILING_SERVERS+=("$host")
+	    FAILING_SERVERS+=("$host\n")
 	fi
 done
 
