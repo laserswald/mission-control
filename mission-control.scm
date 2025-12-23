@@ -38,7 +38,9 @@
         "andromeda"
         "baked"
         "vespa"
-        "french-fry"))
+        "french-fry"
+	"chip"
+	"gnocchi"))
 
 (define wireguard-service-peers
   (names->peers "10.1.0." wireguard-service-names))

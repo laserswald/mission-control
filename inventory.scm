@@ -142,3 +142,15 @@
                     ;; Enable the system checking script.
                     (system-monitor-enabled (current-secrets)))
               french-fry))
+
+;;; `chip` is a Raspberry Pi Zero 2 W. 
+
+(define-host chip
+  ("root" "chip")
+  configure-chip!
+  (core-setup/debian))
+
+(define-host gnocchi
+  ("root" "gnocchi")
+  configure-gnocchi!
+  (core-setup/debian))
