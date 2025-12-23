@@ -4,15 +4,8 @@
 (include "units/dns.scm")
 (include "units/web-server.scm")
 (include "units/minecraft.scm")
-
-
-(define zeroconf-setup/debian
-  (property-group "Set up zeroconf support."
-    (package-service-enabled/apt "avahi-daemon")
-    (pip:packages-installed "wsdd")
-    (services-enabled "wsdd")))
-
 (include "units/jukebox.scm")
+(include "units/network.scm")
 
 (define fail2ban-enabled/arch
   (package-service-enabled/pacman "fail2ban"))
