@@ -140,5 +140,5 @@
                     ; (wireguard-setup/debian "french-fry")
 
                     ;; Enable the system checking script.
-                    (system-monitor-enabled pass-secret-storage))
+                    (system-monitor-enabled (current-secrets)))
               french-fry))

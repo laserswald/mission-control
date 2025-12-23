@@ -20,6 +20,8 @@
         (ultrawave container)
         (ultrawave property))
 
+(current-secrets pass-secret-storage)
+
 ;;; Generate wireguard peers.
 
 (define (names->peers prefix names)
