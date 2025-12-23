@@ -86,6 +86,8 @@
    ;; passes through the VPN in order to be used.
    (wireguard-setup/debian "andromeda")
 
+   (msmtp-email-sender (current-secrets))
+
    ; zeroconf-setup/debian
 
    ;; Guest users are allowed to take advantage of Andromeda's huge RAM
@@ -125,6 +127,7 @@
   configure-baked!
   (core-setup/debian
    (wireguard-setup/debian "baked")
+   (msmtp-email-sender (current-secrets))
    (dns-cname-registered pihole-ftl-service
                          "grocy.lazr.internal"
                          "andromeda.lazr.internal")))

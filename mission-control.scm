@@ -78,7 +78,7 @@
 (include "units/core.scm")
 (include "units/users.scm")
 (include "services.scm")
-(include "inventory.scm")
+(include "hosts.scm")
 
 (define (write-ssh-config hosts)
   (show #t "# Generated file, do not edit!" nl)
