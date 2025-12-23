@@ -75,3 +75,11 @@
        (lambda (name)
          (do-process! `(pass rm --force ,name)))))
 
+    (define current-secrets
+      (make-parameter #f
+                      (lambda (maybe-secrets)
+                        (if (or (equal? #f maybe-secrets)
+                                (secret-storage? maybe-secrets))
+                            maybe-secrets
+                            (error "current-secrets: attempted to register non-secret-storage " maybe-secrets)))))))
+
