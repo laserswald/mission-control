@@ -1,7 +1,7 @@
 
 (define-library (ultrawave property)
 
-  (export 
+  (export
     property
     property-should-apply?
     property-apply!
@@ -15,7 +15,7 @@
    (scheme case-lambda)
    (ultrawave base))
 
-  (begin 
+  (begin
 
    ;;; A property that can be applied or unapplied to a host.
    ;;;
@@ -25,7 +25,7 @@
      (make-property applied? apply-fn unapply-fn load-fn dependencies host)
      property?
 
-     ;; A predicate or #f, if not given then this property shall always 
+     ;; A predicate or #f, if not given then this property shall always
      ;; be applied.
      (applied? property-applied-predicate)
 
@@ -41,7 +41,7 @@
      ;; A pre-loaded host for which to execute a property upon.
      ;; Either a host? or #f.
      (host property-host property-set-host!)
-     
+
      ;; A procedure that will be executed before any properties are applied to the host.
      (load-fn property-load-fn))
 
@@ -76,8 +76,8 @@
    (define (performed-on-host host property)
      (property-set-host! property host)
      property)
-   
-   
+
+
    (define (with-pre-load-fn fn property)
      (property-set-load-fn! property fn)
      property)
@@ -94,11 +94,11 @@
    ;;; (property-applied? property?) -> boolean?
    ;;;
    ;;; Check if this property is applied.
-   (define (property-applied? property) 
+   (define (property-applied? property)
      (unless (property-applied-predicate property)
              (error "property-applied?: cannot check if property applied if no check predicate exists"))
      (property-do-on-host property (property-applied-predicate property)))
-   
+
 
    ;;; (property-should-apply? property?) -> boolean?
    ;;;
@@ -131,7 +131,7 @@
        (when (property-load-fn property)
          ((property-load-fn property)))
        (property-apply! property)))
-  
+
 
    ;;; (prevent-property! property?)
    ;;;
@@ -140,7 +140,7 @@
      (if (property-should-apply? property)
        (property-unapply! property)))
 
-   
+
    ;;; (property-group (string? description) . (property? properties)) -> property?
    ;;;
    ;;; Create a property that depends on several properties, and then upon application

@@ -14,13 +14,13 @@
 
    ;;; Update all the currently installed packages, without confirming.
    (define updated
-     (shell-command-property 
+     (shell-command-property
       '(pacman --quiet --sync --refresh --noconfirm --sysupgrade)
       "Pacman packages updated."))
 
    ;;; Install a list of packages by name.
    (define (packages-installed . names)
-     (property 
+     (property
       ;; check
       (lambda ()
         (do-remote-process `(pacman --query --quiet ,@names >/dev/null)))
@@ -32,4 +32,4 @@
         (do-remote-process! `(pacman --quiet --remove ,@names)))
       '()))))
 
-  
+

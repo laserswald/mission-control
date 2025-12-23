@@ -9,7 +9,7 @@
 
           package
           package-for-manager)
-          
+
   (import (scheme base))
 
   (begin
@@ -21,11 +21,11 @@
       (alternate-names package-alternate-names))
 
     ;; A package is an alist of symbol/boolean to strings, where each symbol is
-    ;; the name of a package manager. 
+    ;; the name of a package manager.
     (define (package . names)
       (unless (alist? names)
-        (error "make-package: expected an alist, but got " names)) 
-      names) 
+        (error "make-package: expected an alist, but got " names))
+      names)
 
     (define (package-for-manager package manager)
       (cond

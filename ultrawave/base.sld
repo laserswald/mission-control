@@ -16,11 +16,11 @@
           current-remote-host current-host-login-string)
 
   (import (ultrawave property))
-  (export property 
-          property-should-apply? 
-          property-apply! 
-          ensure-property! 
-          property-group 
+  (export property
+          property-should-apply?
+          property-apply!
+          ensure-property!
+          property-group
           performed-on-host)
 
   (import (ultrawave command))
@@ -29,10 +29,10 @@
 
     ;;; (configure! (list-of property?) host?)
     ;;;
-    ;;; Apply the properties in order to the host. 
+    ;;; Apply the properties in order to the host.
     (define (configure! configuration host)
-      (parameterize ((current-remote-host host)) 
-        (guard (exn 
+      (parameterize ((current-remote-host host))
+        (guard (exn
                 ((command-exception? exn)
                  (show (current-error-port)
                        (command-exception-displayed exn)
@@ -50,10 +50,10 @@
     ;;;
     ;;; Write to the logger t
       (define (log/remote-host . message)
-        (show #t 
+        (show #t
               (as-green "[" (host-nick (current-remote-host)) "]")
               " "
               (joined displayed message " ")
               nl))))
-  
+
 

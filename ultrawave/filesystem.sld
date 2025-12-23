@@ -21,9 +21,9 @@
 	  copy-remote-file!
 	  set-remote-file-contents!
 	  )
-          
 
-  (import (scheme base) 
+
+  (import (scheme base)
           (scheme show)
           (scheme write)
           (scheme file)
@@ -69,7 +69,7 @@
         (do-process! `(scp ,local-file ,(string-append (current-host-login-string) ":" remote-temp-file)))
         (log/remote-host `(ssh ,(current-host-login-string) -- sudo mv ,remote-temp-file ,destination))
         (do-process! `(ssh ,(current-host-login-string) -- sudo mv ,remote-temp-file ,destination))))
- 
+
     ;;; Copy a remote file to the current host, at the given destination.
     (define (copy-remote-file! remote-file destination)
       (do-process! `(scp ,(string-append (current-host-login-string) ":" remote-file)
@@ -140,21 +140,21 @@
        (lambda ()
 	 (set-remote-file-contents! file contents))))
 
-    ;;; Ensure that FILENAME is owned by USER and GROUP. 
+    ;;; Ensure that FILENAME is owned by USER and GROUP.
     (define (file-owned-by filename user group)
       (shell-command-property  `(chown ,(string-append user ":" group) ,filename)
                                (show #f "Changed ownership of " filename " to " user ":" group)))
-  
+
     ;;; Ensure that the FILENAME has the chmod-compatible PERMISSIONS set.
     (define (file-permissions-set filename permissions)
       (shell-command-property `(chmod ,permissions ,filename)
                               (show #f "Changed permissions of " filename " to " permissions)))
-   
-    ;;; Ensure that FILENAME is owned by USER and GROUP, with all it's . 
+
+    ;;; Ensure that FILENAME is owned by USER and GROUP, with all it's .
     (define (directory-owned-by/rec name user group)
       (shell-command-property  `(chown ,(string-append user ":" group) -R ,name)
                                (show #f "Changed ownership of " name " to " user ":" group)))
-  
+
     ;;; Ensure that the FILENAME has the chmod-compatible PERMISSIONS set.
     (define (directory-permissions-set/rec filename permissions)
       (shell-command-property `(chmod ,permissions -R ,filename)

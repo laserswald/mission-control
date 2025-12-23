@@ -4,9 +4,9 @@
           group-exists
           user-exists/groups
           system-user-exists)
-          
 
-  (import (scheme base) 
+
+  (import (scheme base)
           (scheme show)
           (scheme text)
           (gauche base)
@@ -18,8 +18,8 @@
   (begin
 
     (define (user-exists name)
-      (property 
-       (lambda () 
+      (property
+       (lambda ()
          (do-remote-process `(id ,name >/dev/null)))
        (lambda ()
          (do-remote-process! `(useradd --user-group --create-home ,name))
@@ -31,7 +31,7 @@
     (define (group-exists name)
       (define (applied?)
         (do-remote-process `(getent group ,name >/dev/null)))
-      (define (apply!) 
+      (define (apply!)
         (do-remote-process! `(groupadd ,name))
         (log/remote-host "Group " name "created."))
       (define (unapply!)
@@ -39,10 +39,10 @@
       (property applied?
                 apply!
                 unapply!))
-   
+
     (define (user-exists/groups user . groups)
       (define (apply!)
-        (do-remote-process! 
+        (do-remote-process!
          `(usermod --append --groups ,(textual-join (map symbol->string groups) ",") ,user))
         (log/remote-host "User added to groups: " groups))
       (property #f
@@ -50,10 +50,10 @@
                 #f
                 (append (list (user-exists user))
                         (map group-exists groups))))
-   
+
     (define (system-user-exists name)
-      (property 
-       (lambda () 
+      (property
+       (lambda ()
          (do-remote-process `(id ,name)))
        (lambda ()
          (do-remote-process! `(useradd --add-subids-for-system
@@ -65,8 +65,8 @@
        (lambda ()
          (do-remote-process! `(userdel ,name)))
        '()))
-   
-   
+
+
     #;(define (user-password-generated username secret-storage)
        (let ((secret-path (string-append "sys/" (host-nick (current-remote-host)) "/" username)))
          (property
@@ -79,8 +79,8 @@
                          :redirects ((<<))
              (lambda ()
                (secret-storage-remove! secret-storage secret-path))
-         
-             '())))))))
-         
 
-   
+             '())))))))
+
+
+

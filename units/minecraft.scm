@@ -73,7 +73,7 @@
    (minecraft-json-config-installed "banned-players.json")
    (minecraft-json-config-installed "ops.json")
    (minecraft-json-config-installed "whitelist.json")
-                     
+
    (file-copied-to (local-config "bukkit.yml")
                    (string-append install-dir "/bukkit.yml"))
    (file-copied-to (local-config "commands.yml")

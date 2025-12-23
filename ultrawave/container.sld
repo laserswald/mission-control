@@ -32,7 +32,7 @@
                 (lambda ()
                   (do-remote-process! `(rm -f ,file)))))
 
-    (define (local-image-copied image-name) 
+    (define (local-image-copied image-name)
       (define image-file
         (string-map (lambda (c)
                       (cond

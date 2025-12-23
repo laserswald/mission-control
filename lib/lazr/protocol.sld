@@ -5,7 +5,7 @@
 
   (import (scheme base))
 
-  (begin         
+  (begin
     ;;; Define a group of procedures that implement an abstraction of functionality.
     ;;;
     ;;; (define-protocol <record-type-descriptor>

@@ -5,7 +5,7 @@
 
 (define (lookup-player-id player-name)
   (let-values (((code headers body)
-                (http-get "api.mojang.com" 
+                (http-get "api.mojang.com"
                          (string-append "/users/profiles/minecraft/"
                                         player-name))))
     (unless (equal? code "200")

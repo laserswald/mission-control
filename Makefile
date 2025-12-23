@@ -1,4 +1,4 @@
-
+.POSIX:
 GOSHFLAGS=-r7 -A. -Alib
 
 deploy:
@@ -18,3 +18,4 @@ sol:
 
 lazr-space.conf:
 	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (lazr/generate-ssh-config) (exit)'
+

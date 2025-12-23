@@ -1,6 +1,8 @@
 (define-library (ultrawave network)
-  (export ip-forwarding-enabled)
+  (export ip-forwarding-enabled
+          hostname-set)
   (import (scheme base)
+          (scheme show)
           (ultrawave base)
           (ultrawave property)
           (ultrawave command))

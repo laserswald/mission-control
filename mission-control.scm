@@ -1,5 +1,6 @@
 
 (import (scheme base)
+        (scheme file)
         (scheme show)
         (scheme hash-table)
         (scheme comparator)
@@ -27,7 +28,7 @@
 (define (names->peers prefix names)
   (let ((ip-last 1))
     (map (lambda (name)
-           (let ((peer (wireguard-peer name (string-append prefix (number->string ip-last))))) 
+           (let ((peer (wireguard-peer name (string-append prefix (number->string ip-last)))))
              (set! ip-last (+ 1 ip-last))
              peer))
          names)))
@@ -44,7 +45,7 @@
 
 (define wireguard-service-peers
   (names->peers "10.1.0." wireguard-service-names))
-        
+
 (define wireguard-user-names
   (list "ben-phone"
         "ben-laptop"
@@ -59,7 +60,6 @@
         "victoria"
         "colton"
         "apk"))
-        
 
 (define storage-users
   (list "ben" "jules" "miriam" "megan" "gina" "robin"))
@@ -98,8 +98,9 @@
 
 (define (lazr/generate-ssh-config)
   (generate-ssh-config wireguard-service-peers
-		       "lazr-vpn.conf"))
+		       "lazr-space.conf"))
 
 (define (configure-all!)
   (wireguard-network-generate-configs lazr-internal-vpn)
   (inventory-configure!/threaded))
+

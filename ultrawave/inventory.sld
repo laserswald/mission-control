@@ -19,11 +19,11 @@
           (srfi 18))
 
   (begin
-    (define all-inventory 
+    (define all-inventory
       (make-hash-table (make-default-comparator)))
 
     (define (inventory-clear!)
-      (set! all-inventory 
+      (set! all-inventory
             (make-hash-table (make-default-comparator))))
 
     (define (inventory-add! host configure!)
@@ -44,14 +44,14 @@
       (csi l #\F)
       ; Erase in display everything from cursor on
       (csi 0 #\J))
-             
-    
+
+
     (define (inventory-configure!/threaded)
       (let ([threads '()])
 
         (define (make-worker host configure!)
           (make-thread (lambda ()
-                         (guard (exn 
+                         (guard (exn
                                  ((command-exception? exn)
                                   (show (current-error-port)
                                         (command-exception-displayed exn)
@@ -67,13 +67,13 @@
           (guard (exn ((terminated-thread-exception? exn)
                        (show #t "Worker thread " name " terminated." nl)
                        #f)
-                      ((uncaught-exception? exn) 
+                      ((uncaught-exception? exn)
                        (raise (uncaught-exception-reason exn)))
                       (else (report-error exn) #f))
             (thread-join! worker)))
 
         (define (add-worker! host configure!)
-          (set! threads 
+          (set! threads
                 (cons (make-worker host configure!)
                       threads)))
 
@@ -86,11 +86,11 @@
     (define-syntax define-host
       (syntax-rules ()
         ((define-host %identifier (%user %address) %configure-identifier (%properties ...))
-         (begin 
+         (begin
           (define %identifier
             (host %user %address (symbol->string '%identifier)))
           (define (%configure-identifier)
             (configure! (list %properties ...) %identifier))
           (inventory-add! %identifier %configure-identifier)))))))
-   
-   
+
+

@@ -25,7 +25,7 @@ done
 
 # if [[ ${#SERVERS[@]} -ne 0 ]]; then
 if [[ ${FAILING_SERVERS} || ($DEBUG_MODE -ne 0)]]; then
-    if [ $DEBUG_MODE -ne 0 ]; then	
+    if [ $DEBUG_MODE -ne 0 ]; then
 	alertcmd="cat"
     else
 	alertcmd="sendmail -t -F lazr.space -f bot+server-monitor@lazr.space"

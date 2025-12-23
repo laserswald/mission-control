@@ -8,7 +8,7 @@
 
   (begin
     (define (make-hook) (list))
-    
+
     (define (hook-adjoin hook proc)
       (lset-adjoin eq? hook proc))
 

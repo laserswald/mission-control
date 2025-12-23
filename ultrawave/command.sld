@@ -7,7 +7,7 @@
    do-remote-process
    do-remote-process!
    shell-command-property
-   
+
    command-exception
    command-exception?
    command-exception-displayed)
@@ -24,17 +24,17 @@
     (define (protocol-command protocol command)
       (case protocol
        ((ssh)
-        (append `(ssh ,(current-host-login-string)) 
+        (append `(ssh ,(current-host-login-string))
                 command))
        ((sudo)
         (append `(sudo)
                 command))
        ((ssh-sudo)
-        (append `(ssh ,(current-host-login-string) sudo) 
+        (append `(ssh ,(current-host-login-string) sudo)
                 command))
        (else
         (error "protocol-command: no such protocol" protocol))))
-  
+
     (define (process->string command+args)
       (let* ([p (run-process command+args
                             :redirects '((> 1 out)))]
@@ -89,7 +89,7 @@
 
     ;;; (shell-command-property (list? command) (string? description)) -> property?
     ;;;
-    ;;; Create a property that will always run the `command` and then log the 
+    ;;; Create a property that will always run the `command` and then log the
     ;;; given description.
     (define (shell-command-property command description)
       (property

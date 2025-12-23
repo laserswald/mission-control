@@ -11,5 +11,5 @@
       (shell-command-property
        `(python3 -m pip install ,@packages)
        (show #f "Pip packages installed:" packages)))
-   
+
    ))

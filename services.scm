@@ -77,9 +77,9 @@
 
     (file-linked/symbolic "/etc/lighttpd/conf-available/20-grocy.conf"
                           "/etc/lighttpd/conf-enabled")
-                  
+
     (lighttpd-tested-config "/etc/lighttpd/conf-available/20-grocy.conf")
-                  
+
     (services-restarted "lighttpd")))
 
 (define bird-cam-receiver-enabled
@@ -147,7 +147,7 @@
                    --in-interface ens3
                    --dport ,exposed-port
                    --jump DNAT
-                   --to-destination ,internal-dest)) 
+                   --to-destination ,internal-dest))
 
      ;; NAT to source
      (apply-firewall-rule!
@@ -158,7 +158,7 @@
         --destination ,internal-dest
         --dport ,exposed-port
         --jump SNAT
-        --to-source ,exposed-addr)) 
+        --to-source ,exposed-addr))
 
      (log/remote-host "Installed port tunnel from " exposed-addr ":" exposed-port " -> " internal-dest))))
 
@@ -168,7 +168,7 @@
 (define (msmtp-email-sender secrets)
   (property-group
    (show #f "msmtp email forwarding enabled")
-   (apt:packages-installed "msmtp" "msmtp-mta") 
+   (apt:packages-installed "msmtp" "msmtp-mta")
    (file-has-contents "/etc/msmtprc"
                       (list
                        "defaults"
@@ -191,7 +191,6 @@
    ;; Debian installs an 'msmtp' user for us.
    (file-owned-by "/etc/secrets/msmtp-password" "root" "msmtp")
    (file-permissions-set "/etc/secrets/msmtp-password" "640")))
-   
 
 (define mail-sender-enabled
   (property-group

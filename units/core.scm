@@ -4,13 +4,13 @@
 (load "units/users.scm")
 
 (define (package-service-enabled/pacman package)
-  (property-group 
+  (property-group
    (show #f package " installed and enabled.")
    (pacman:packages-installed package)
    (services-enabled package)))
 
 (define (package-service-enabled/apt package)
-  (property-group 
+  (property-group
    (show #f package " installed and enabled.")
    (apt:packages-installed package)
    (services-enabled package)))

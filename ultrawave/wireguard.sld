@@ -21,8 +21,8 @@
           wireguard-network-server
           wireguard-network-clients
           wireguard-network-generate-configs)
-          
-          
+
+
 
   (import (scheme base)
           (scheme text)
@@ -151,12 +151,12 @@
                       clients))))
 
       (let ((hub (wireguard-network-server network))
-            (clients (wireguard-network-clients network)))  
+            (clients (wireguard-network-clients network)))
         (for-each (lambda (peer)
                     (generate-peer-files hub peer))
                   clients)
         (generate-hub-file hub clients)))
-                  
+
 
     (define (wireguard-setup/arch name)
       (property-group

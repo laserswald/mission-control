@@ -2,7 +2,7 @@
         (ultrawave base)
         (ultrawave user))
 
-(define guest-groups 
+(define guest-groups
   '(guest dev))
 
 ;; Set up my user.
@@ -16,10 +16,12 @@
   (property-group (show #f "User " username " exists.")
     (apply user-exists/groups username guest-groups)))
 
+;; Set up a system user.
+;; System users are quite locked down.
 
 ;; Set up all the guest users passed.
 (define (guest-users-set-up users)
-  (apply property-group 
+  (apply property-group
          (show #f "Guest users set up.")
          (map guest-user-set-up users)))
 

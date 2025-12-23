@@ -31,7 +31,7 @@
      (string-append "Registered SRV record for "
                     name " via " transport " in " domain " to "
                     server ":" port)
-     (file-has-line ultrawave-dnsmasq-file 
+     (file-has-line ultrawave-dnsmasq-file
                     (string-append "srv-host="
                                    "_" name "." "_" transport "." domain ","
                                   server ","
@@ -40,3 +40,4 @@
 
   (dns-service cname-registered
                srv-registered))
+

@@ -12,10 +12,10 @@
           show-host
           host-login-string
           host-alive?
-          
+
           localhost
           with-local-host
-          
+
           current-remote-host
           current-host-login-string)
 
@@ -49,24 +49,24 @@
      ;; The username to execute commands as.
      (user host-user)
 
-     ;; The domain name or IP address that the host can be 
+     ;; The domain names or IP addresses that the host can be
      ;; accessed by.
      (name host-name)
 
      ;; A human-readable nickname for the host.
      (nick host-nick)
-     
+
      ;; What protocol should be used?
      (protocol host-protocol)
-     
+
      ;; What kind of package manager is supported on this host?
      (package-manager host-package-manager)
-     
+
      ;; Pre/post property information.
-     (extras host-extras 
+     (extras host-extras
              host-set-extras!)
-    
-     ;; Pre-configuration hook: list of procedures to be executed 
+
+     ;; Pre-configuration hook: list of procedures to be executed
      ;; before properties are configured.
      (pre-config-hook host-pre-config-hook
                       host-set-pre-config-hook!)
@@ -74,10 +74,10 @@
      ;; Post-configuration hook.
      (post-config-hook host-post-config-hook
                        host-set-pre-config-hook!))
-   
-   
+
+
    (define (make-hook) '())
-   
+
    (define (hook-adjoin hook proc)
      (cons proc hook))
 
@@ -85,12 +85,12 @@
      (for-each (lambda (p) (p)) hook))
 
 
-   ;;; (host [(string? user)] 
+   ;;; (host [(string? user)]
    ;;;       (string? hostname) [(string? nickname)]) -> host?
    ;;;
    ;;; Construct a host.
    (define host
-     (case-lambda 
+     (case-lambda
        ((name)
         (host "root" name))
 
@@ -99,10 +99,10 @@
 
        ((user name nick)
         (host user name nick 'ssh))
-       
+
        ((user name nick proto)
-        (%host user name nick proto 
-               #f 
+        (%host user name nick proto
+               #f
                (mapping (make-default-comparator))
                (make-hook)
                (make-hook)))))
@@ -112,7 +112,7 @@
    ;;;
    ;;; Display a host.
    (define (show-host host)
-     (show #t 
+     (show #t
            "<host '"
            (host-nick host)
            "' "
@@ -123,41 +123,40 @@
            (host-name host)
            ">"))
 
-   
    ;;; (host-login-string host?) -> string?
    ;;;
    ;;; Get the SSH-style login string for this host.
    (define (host-login-string host)
      (string-append (host-user host) "@" (host-name host)))
 
-   
+
    ;;; (host-alive? host?) -> boolean?
    ;;;
    ;;; Returns true if the host is pingable.
    (define (host-alive? host)
      (do-process `(ping -c 1 ,(host-name host))))
 
-   
+
    ;;; (host-extras-ref host? any?) -> any? | #f
    ;;;
    ;;; Look up an extra configuration parameter.
    (define (host-extras-ref host key)
      (mapping-ref/default (host-extras host) key #f))
-   
-   
+
+
    (define (host-extras-set! host key value)
      (host-set-extras! host (mapping-set (host-extras host) key value)))
-  
+
 
    ;;; (host-extras-adjoin! host? any? any?) -> undefined
    ;;;
    ;;; Add an extra information parameter.
    (define (host-extras-adjoin! host key . items)
-     (host-set-extras! host 
-                       (mapping-update 
+     (host-set-extras! host
+                       (mapping-update
                         (host-extras host)
                         key
-                        ;; updater 
+                        ;; updater
                         (lambda (old-value)
                           (set-adjoin old-value items))
                         ;; on failure
@@ -166,7 +165,7 @@
 
 
    ;;; A host for the local machine.
-   (define localhost 
+   (define localhost
     (host (get-environment-variable "USER")
           "localhost"
           "localhost"
@@ -178,14 +177,14 @@
 
    ;;; Parameter for current host we are applying to.
    (define current-remote-host
-     (make-parameter 
+     (make-parameter
       localhost
       (lambda (host)
-        (if (host? host) 
-          host 
+        (if (host? host)
+          host
           (error "current-remote-host: cannot be set to non-host value " host)))))
 
-     
+
    ;;; (with-local-host body)
    ;;;
    ;;; Perform the body on the local machine.

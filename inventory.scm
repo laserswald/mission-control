@@ -17,7 +17,7 @@
 ;; Currently, it is a small VPS hosted by Vultr based in Atlanta.
 ;;
 ;; It is the current WireGuard hub, as well as the jump host for
-;; the heavier weight services (mostly game services). 
+;; the heavier weight services (mostly game services).
 (define-host sol
   ("root" "sol.lazr.space")
   configure-sol!
@@ -39,7 +39,7 @@
    ; certbot-enabled
 
    ;; Allow tunneling traffic from the internet through Sol to my VPN.
-   ;; 
+   ;;
    ;; This lets me host more expensive services without paying a large recurring
    ;; fee.
    ip-forwarding-enabled
@@ -51,7 +51,7 @@
    (port-tunneled "10.1.0.1" 25566 "10.1.0.3")
    (port-tunneled "10.1.0.1" 24454 "10.1.0.3") ; Simple Voice Chat
 
-   ;; Enable web hosting. 
+   ;; Enable web hosting.
    lighttpd-enabled/arch
 
    ;; Enable calendar hosting via CalDAV.
@@ -72,9 +72,9 @@
 ;;
 ;; Andromeda hosts game servers like Minecraft and Factorio as well as development
 ;; tools and pipelines like Laminar.
-(define-host andromeda 
-  ; ("root" "andromeda.home.arpa") 
-  ("root" "192.168.1.3") 
+(define-host andromeda
+  ; ("root" "andromeda.home.arpa")
+  ("root" "192.168.1.3")
   configure-andromeda!
   (
    ;; Update and upgrade all the packages to the latest stuff available.
@@ -110,7 +110,7 @@
    ; (accountabilly-enabled)
    (apt:packages-installed "mpc")))
 
-#;(define-host vespa 
+#;(define-host vespa
   ("root" "192.168.1.5")
   configure-vespa!
   (core-setup/debian
@@ -123,14 +123,14 @@
 (define-host baked
   ("root" "baked.home.arpa")
   configure-baked!
-  (core-setup/debian 
+  (core-setup/debian
    (wireguard-setup/debian "baked")
    (dns-cname-registered pihole-ftl-service
                          "grocy.lazr.internal"
-                         "andromeda.lazr.internal"))) 
+                         "andromeda.lazr.internal")))
 
 
-;;; French-fry is an AWS EC2 instance used for small tasks and for cloud practice.
+;;; `french-fry` is an AWS EC2 instance used for small tasks and for cloud practice.
 
 (define french-fry
   (host "admin" "french-fry" "french-fry" 'ssh-sudo))
@@ -143,7 +143,7 @@
                     (system-monitor-enabled (current-secrets)))
               french-fry))
 
-;;; `chip` is a Raspberry Pi Zero 2 W. 
+;;; `chip` is a Raspberry Pi Zero 2 W.
 
 (define-host chip
   ("root" "chip")
