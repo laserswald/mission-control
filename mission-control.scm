@@ -9,7 +9,7 @@
         (gauche process)
 
         (ultrawave base)
-	(ultrawave host)
+        (ultrawave host)
         (ultrawave user)
         (ultrawave wireguard)
         (ultrawave filesystem)
@@ -35,10 +35,10 @@
 
 (define (write-ssh-host-config host)
   (show #t
-	"Host " (wireguard-peer-name host) nl
-	"  HostName " (wireguard-peer-ip-address host) nl
-	"  User lazr"nl
-	nl))
+        "Host " (wireguard-peer-name host) nl
+        "  HostName " (wireguard-peer-ip-address host) nl
+        "  User lazr"nl
+        nl))
 
 (define (generate-ssh-config hosts filename)
   (with-output-to-file filename
@@ -47,7 +47,7 @@
 
 (define (lazr/generate-ssh-config)
   (generate-ssh-config wireguard-service-peers
-		       "lazr-space.conf"))
+                       "lazr-space.conf"))
 
 (define (configure-all!)
   (wireguard-network-generate-configs lazr-internal-vpn)
