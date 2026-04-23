@@ -1,28 +1,43 @@
 .POSIX:
-GOSHFLAGS=-r7 -A. -Alib
+SCHEME=gosh -r7
+SCHEMEFLAGS=-A. -Alib
+
+#
+#
+#
 
 deploy:
-	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-all!) (exit)'
+	$(SCHEME) $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-all!) (exit)'
 
 repl:
-	gosh $(GOSHFLAGS) -l mission-control.scm
+	$(SCHEME) $(GOSHFLAGS) -l mission-control.scm
+
+clean:
+	find . -iname "#*#" -o -iname "*~" -delete
+
+#
+# Build a host only
+#
 
 french-fry:
-	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-french-fry!) (exit)'
+	$(SCHEME) $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-french-fry!) (exit)'
 
 andromeda:
-	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-andromeda!) (exit)'
+	$(SCHEME) $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-andromeda!) (exit)'
 
 chip:
-	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-chip!) (exit)'
+	$(SCHEME) $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-chip!) (exit)'
 
 sol:
-	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-sol!) (exit)'
+	$(SCHEME) $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-sol!) (exit)'
 
-lazr-space.conf:
-	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (lazr/generate-ssh-config) (exit)'
+#
+# Deploy an application
+#
 
 rewards-app:
-	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (install-rewards-app!) (exit)'
+	$(SCHEME) $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (install-rewards-app!) (exit)'
 
+lazr-space.conf:
+	$(SCHEME) $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (lazr/generate-ssh-config) (exit)'
 
