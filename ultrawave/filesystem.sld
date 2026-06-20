@@ -3,8 +3,8 @@
   (export directory-exists
           directory-owned-by/rec
           directory-permissions-set/rec
-	  file-owned-by
-	  file-permissions-set
+	      file-owned-by
+	      file-permissions-set
           file-copied-to
           file-copied-from
           file-linked/hard
@@ -12,15 +12,15 @@
           file-has-line
           file-has-contents
 
-	  remote-file-exists?
-	  remote-directory-exists?
-	  create-local-directory!
-	  create-remote-directory!
-	  call-with-local-temporary-filename
-	  copy-local-file!
-	  copy-remote-file!
-	  set-remote-file-contents!
-	  )
+	      remote-file-exists?
+	      remote-directory-exists?
+	      create-local-directory!
+	      create-remote-directory!
+	      call-with-local-temporary-filename
+	      copy-local-file!
+	      copy-remote-file!
+	      set-remote-file-contents!
+	      )
 
 
   (import (scheme base)
@@ -53,13 +53,13 @@
     ;;; Call a procedure with an automatically cleaned up temporary file name.
     (define (call-with-local-temporary-filename proc)
       (let ((tempname #f))
-	(dynamic-wind
-	  (lambda ()
-	    (set! tempname (string-trim-both (process->string '(mktemp)))))
-	  (lambda ()
-	    (proc tempname))
-	  (lambda ()
-	    (do-process! `(rm -rf ,tempname))))))
+	    (dynamic-wind
+	      (lambda ()
+	        (set! tempname (string-trim-both (process->string '(mktemp)))))
+	      (lambda ()
+	        (proc tempname))
+	      (lambda ()
+	        (do-process! `(rm -rf ,tempname))))))
 
     ;;; Copies a local file using `scp` to the given destination at the remote host.
     (define (copy-local-file! local-file destination)
@@ -77,15 +77,23 @@
 
     ;;; Set a remote file's contents to the list of strings given.
     (define (set-remote-file-contents! file contents)
+      (show #t "set-remote-file-contents!" nl file nl contents nl)
       (call-with-local-temporary-filename
        (lambda (tempname)
-	 (with-output-to-file tempname
+         (with-output-to-file tempname
            (lambda ()
-	     (for-each (lambda (ln)
-		         (display ln (current-output-port))
-		         (newline (current-output-port)))
-		       contents)))
-	 (copy-local-file! tempname file))))
+             (cond
+              ((string? contents)
+                (display contents (current-output-port))
+                (newline (current-output-port)))
+              ((list? contents)
+                (for-each (lambda (ln)
+                            (display ln (current-output-port))
+                            (newline (current-output-port)))
+                          contents))
+              (else
+               (error "Can't set file contents, unknown file content data" contents)))))
+         (copy-local-file! tempname file))))
 
     ;;;;
     ;;;; Directory properties.
@@ -109,7 +117,7 @@
        (lambda ()
          (remote-directory-exists? destination))
        (lambda ()
-	 (copy-local-file! local-file destination))
+	     (copy-local-file! local-file destination))
        (lambda ()
          (do-remote-process! `(rm -f ,destination)))))
 
@@ -138,7 +146,7 @@
     (define (file-has-contents file contents)
       (property
        (lambda ()
-	 (set-remote-file-contents! file contents))))
+	     (set-remote-file-contents! file contents))))
 
     ;;; Ensure that FILENAME is owned by USER and GROUP.
     (define (file-owned-by filename user group)

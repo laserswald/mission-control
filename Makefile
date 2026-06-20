@@ -10,6 +10,9 @@ repl:
 french-fry:
 	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-french-fry!) (exit)'
 
+andromeda:
+	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-andromeda!) (exit)'
+
 chip:
 	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (configure-chip!) (exit)'
 
@@ -18,4 +21,8 @@ sol:
 
 lazr-space.conf:
 	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (lazr/generate-ssh-config) (exit)'
+
+rewards-app:
+	gosh $(GOSHFLAGS) -e '(import (scheme load)) (load "mission-control.scm") (install-rewards-app!) (exit)'
+
 

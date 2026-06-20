@@ -1,3 +1,4 @@
+(import (scheme text))
 
 (define-record-type <dns-service>
   (dns-service add-cname-proc
@@ -6,8 +7,8 @@
   (add-cname-proc dns-service-add-cname-proc)
   (add-srv-proc dns-service-add-srv-proc))
 
-(define (dns-cname-registered dns alias canonical)
-  ((dns-service-add-cname-proc dns) alias canonical))
+(define (dns-cname-registered dns canonical . aliases)
+  ((dns-service-add-cname-proc dns) canonical aliases))
 
 (define (dns-srv-registered dns name transport domain server port)
   ((dns-service-add-srv-proc dns) name transport domain server port))
@@ -18,10 +19,10 @@
     "/etc/dnsmasq.d/99-services.conf")
 
   ;;; Register a canonical name entry to the dnsmasq configuration.
-  (define (cname-registered alias canonical)
+  (define (cnames-registered canonical aliases)
     (property-group (string-append "Registered CNAME " alias " => " canonical)
      (file-has-line ultrawave-dnsmasq-file
-                    (string-append "cname=" alias "," canonical))
+                    (string-append "cname=" (textual-join aliases ",") "," canonical))
      (services-restarted service-name)))
 
 
@@ -38,6 +39,6 @@
                                   (number->string port)))
      (services-restarted service-name)))
 
-  (dns-service cname-registered
+  (dns-service cnames-registered
                srv-registered))
 

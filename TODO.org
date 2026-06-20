@@ -1,0 +1,5 @@
+* TODO Get the current host when building properties
+Properties are closures right now so it captures the current state of (current-remote-host). This sucks and needs to be switched so that properties can examine who they are being installed into.
+* TODO Generally unclean code
+* TODO Speeding up applying of properties
+* TODO Hosts know what their package manager / supervisor are and properties should be agnostic about that

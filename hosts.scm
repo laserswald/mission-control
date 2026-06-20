@@ -106,6 +106,8 @@
    ;;; WIP projects here.
    ;;;
 
+   (web-application-site-installed rewards-app)
+
    ;; The bird cam sends a live feed to Andromeda for viewing.
    bird-cam-receiver-enabled
 
@@ -128,6 +130,11 @@
   (core-setup/debian
    (wireguard-setup/debian "baked")
    (msmtp-email-sender (current-secrets))
+
+   (dns-cname-registered pihole-ftl-service
+                         "rewards.lazr.internal"
+                         "andromeda.lazr.internal")
+
    (dns-cname-registered pihole-ftl-service
                          "grocy.lazr.internal"
                          "andromeda.lazr.internal")))
@@ -157,3 +164,4 @@
   ("root" "gnocchi")
   configure-gnocchi!
   (core-setup/debian))
+

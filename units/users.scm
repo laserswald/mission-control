@@ -29,6 +29,5 @@
 (define (install-key! host)
   (do-process! `(ssh-copy-id ,(string-append "lazr@" (host-name host)))))
 
-
 (define (install-keys! hosts)
   (for-each install-key! hosts))

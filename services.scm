@@ -214,3 +214,19 @@
    daemon-reloaded
 
    (services-enabled "system-monitor.timer")))
+
+(define rewards-app
+  (web-application "rewards"
+                   "rewards.lazr.internal rewards.home.arpa"
+                   8081))
+
+(define (install-rewards-app!)
+  (configure! (list
+               (web-server-enabled)
+               (web-application-site-installed rewards-app))
+              andromeda)
+  (configure! (list (dns-cname-registered pihole-ftl-service
+                                          "rewards.lazr.internal"
+                                          "andromeda.lazr.internal"))
+              baked))
+

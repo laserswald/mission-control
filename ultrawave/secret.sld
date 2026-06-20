@@ -1,14 +1,9 @@
 ;;;; ultrawave.secret : access secret data
 
 (define-library (ultrawave secret)
-  (export secret-set!
-          secret-ref
-          secret-remove!
-
+  (export secret-set! secret-ref secret-remove!
           secret-storage
-
           pass-secret-storage
-
           current-secrets)
 
   (import (scheme base)

@@ -1,0 +1,10 @@
+[Unit]
+Description=Top-level container compose file
+AssertPathExists=/srv/
+
+[Service]
+ExecStart=podman-compose --file /srv/ctnr/compose.yml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

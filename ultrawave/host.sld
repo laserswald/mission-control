@@ -184,7 +184,6 @@
           host
           (error "current-remote-host: cannot be set to non-host value " host)))))
 
-
    ;;; (with-local-host body)
    ;;;
    ;;; Perform the body on the local machine.

@@ -21,6 +21,45 @@
 
   (begin
 
+    ;;; Represents an exception from running a command.
+    (define-record-type <command-exception>
+        (command-exception host command retcode stderr)
+        command-exception?
+      (host command-exception-host)
+      (command command-exception-command)
+      (retcode command-exception-retcode)
+      (stderr command-exception-stderr))
+
+    ;;; Display the command-exception in a `show` call.
+    (define (command-exception-displayed ce)
+      (each
+        (joined displayed
+                (list
+                  (as-red "[" (host-nick (command-exception-host ce)) "]")
+                  (command-exception-command ce)
+                  "failed with error code"
+                  (command-exception-retcode ce))
+                " ")
+        nl
+        (as-yellow (command-exception-stderr ce))))
+
+    ;;; Run a command and capture its output in a string.
+    (define (process->string command+args)
+      (let* ([p (run-process command+args
+                            :redirects '((> 1 out)))]
+             [result (port->string (process-output p 'out))])
+        (process-wait p)
+        result))
+
+    ;;; Transform a value by piping it into a command.
+    (define (process-transform value command+args)
+      (let* ([p (run-process command+args
+                             :redirects `((<< 0 ,value) (> 1 out)))]
+             [result (port->string (process-output p 'out))])
+        (process-wait p)
+        result))
+
+    ;; Modify a command to communicate using a protocol wrapper.
     (define (protocol-command protocol command)
       (case protocol
        ((ssh)
@@ -35,42 +74,11 @@
        (else
         (error "protocol-command: no such protocol" protocol))))
 
-    (define (process->string command+args)
-      (let* ([p (run-process command+args
-                            :redirects '((> 1 out)))]
-             [result (port->string (process-output p 'out))])
-        (process-wait p)
-        result))
-
-    (define (process-transform value command+args)
-      (let* ([p (run-process command+args
-                             :redirects `((<< 0 ,value) (> 1 out)))]
-             [result (port->string (process-output p 'out))])
-        (process-wait p)
-        result))
-
-    (define-record-type <command-exception>
-        (command-exception host command retcode stderr)
-        command-exception?
-      (host command-exception-host)
-      (command command-exception-command)
-      (retcode command-exception-retcode)
-      (stderr command-exception-stderr))
-
-    (define (command-exception-displayed ce)
-      (each
-        (joined displayed
-                (list
-                  (as-red "[" (host-nick (command-exception-host ce)) "]")
-                  (command-exception-command ce)
-                  "failed with error code"
-                  (command-exception-retcode ce))
-                " ")
-        nl
-        (as-yellow (command-exception-stderr ce))))
-
     (define (process->string/remote command)
-      (process->string (protocol-command (host-protocol (current-remote-host)))))
+      (process->string
+       (protocol-command
+	(host-protocol (current-remote-host))
+	command)))
 
     (define (do-remote-process command)
       (do-process (protocol-command (host-protocol (current-remote-host)) command)))
